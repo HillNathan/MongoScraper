@@ -7,11 +7,12 @@ const mongojs = require('mongojs')
 const axios = require('axios')
 const cheerio = require('cheerio')
 
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoScraper";
+let theUrl = "https://news.ycombinator.com/"
+
 console.log('Routes Loaded...')
 
-mongoose.connect("mongodb://localhost/mongoScraper", { useNewUrlParser: true });
-
-let theUrl = "https://news.ycombinator.com/"
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 router.get ("/scrape", (req,res) => {
     axios.get( theUrl )
@@ -44,8 +45,13 @@ router.get ("/scrape", (req,res) => {
 
 router.get("/foo", function(req, res) {
     // Find all Users
-    console.log("default route hit")
-    res.send("Bar")
-  });
+    db.Article.find({})
+        .then(data => {
+            res.json(data)
+        })
+        .catch(err => {
+            res.json(err.message)
+        })
+    });
 
 module.exports = router
