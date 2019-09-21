@@ -54,4 +54,58 @@ router.get("/foo", function(req, res) {
         })
     });
 
+router.get("/article/:id", function(req, res) {
+    let theId = req.params.id
+    db.Article.findOne({ _id: mongojs.ObjectId(theId)})
+        .populate("notes")
+        .then( response => {
+        res.json(response)
+        })
+        .catch( err => {
+        res.json(err)
+        })
+    });
+
+router.post("/addnote", (req, res) => {
+    let {note} = req.body
+    console.log (note)
+    db.Note.create({note})
+      .then( newNote => {
+        return db.Article.findOneAndUpdate(
+            { _id: mongojs.ObjectID(req.body._id) }, 
+            {$push: {notes: newNote._id} }, 
+            {new: true} )
+      })
+      .then(updatedArticle => {
+          res.json(updatedArticle)
+      })
+      .catch(err => {
+          res.json(err)
+      })
+    res.redirect("/")
+})
+
+router.post("/delete-note", (req,res) => {
+    // console.log(req.body.id)
+    db.Note.findOneAndDelete({ _id: mongojs.ObjectId(req.body.id)})
+    .then( response => {
+    res.json(response)
+    })
+    .catch( err => {
+    res.json(err)
+    }) 
+})
+
+router.get("/saved", function(req, res) {
+    // Find all Users
+    db.Article.find({ saved: true })
+        .then(data => {
+            res.json(data)
+        })
+        .catch(err => {
+            res.json(err.message)
+        })
+    });
+
+
 module.exports = router

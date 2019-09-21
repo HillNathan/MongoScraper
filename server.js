@@ -1,6 +1,6 @@
 // Initialize Express
 const app = require('./config/express-config')
-const PORT = 3000
+const PORT = 3333
 
 // Start the server
 app.listen(PORT, function() {
