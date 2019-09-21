@@ -55,15 +55,14 @@ router.get("/foo", function(req, res) {
     });
 
 router.get("/article/:id", function(req, res) {
-    let theId = req.params.id
-    db.Article.findOne({ _id: mongojs.ObjectId(theId)})
+    db.Article.findOne({ _id: mongojs.ObjectId(req.params.id)})
         .populate("notes")
         .then( response => {
-        res.json(response)
-        })
+            res.json(response)
+            })
         .catch( err => {
-        res.json(err)
-        })
+            res.json(err)
+            })
     });
 
 router.post("/addnote", (req, res) => {
