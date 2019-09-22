@@ -1,25 +1,25 @@
+let showSaved = false
+
 // DOM Manipulation functions go here...
 $( document ).ready(function() {
     $("#close-note").on("click", () => closeNotes() ) 
 
     $("#all-articles").on("click", function() {
         $("#page-title").text("All Scraped Articles")
-        $("#article-list").empty()
-        displayArticles(false)
+        showSaved = false
+        displayArticles(showSaved)
     })
 
     $("#saved-articles").on("click", function() {
         $("#page-title").text("Saved Articles Only")
-        $("#article-list").empty()
-        displayArticles(true)
+        showSaved = true
+        displayArticles(showSaved)
     })
-
-
 
 })
 
 // Grab the articles as a json
-displayArticles(false);
+displayArticles(showSaved);
 
 $(document).on("click", "p", function() {
     openNotes($(this).attr("data-id"))
@@ -48,7 +48,15 @@ $(document).on("click", ".save-action", function() {
     if (currentState === "false") newState = true
     theArticle.saved = newState
     theArticle.id = $(this).attr("data-id")
-    console.log(theArticle)
+    $.ajax({
+        type: "POST",
+        url: "/update-saved", 
+        data: theArticle
+    })
+    .then(response => {
+        console.log(response)
+        displayArticles(showSaved)
+    })
 })
 
 $(document).on("click", ".add-note", function() {
@@ -104,6 +112,8 @@ function displayArticles(savedOnly) {
     let theUrl = ""
     if (savedOnly) theUrl = "/saved"
     else theUrl = "/foo"
+
+    $("#article-list").empty()
 
     $.getJSON(theUrl, data => {
         // For each one

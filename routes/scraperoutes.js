@@ -106,5 +106,17 @@ router.get("/saved", function(req, res) {
         })
     });
 
+router.post("/update-saved", (req,res) => {
+    console.log(req.body)
+    let {saved} = req.body
+    db.Article.findOneAndUpdate({ _id: mongojs.ObjectId(req.body.id) }, {saved})
+        .then(updatedArticle => {
+            res.json(updatedArticle)
+        })
+        .catch(err => {
+            res.json(err)
+        })
+    })
+
 
 module.exports = router
