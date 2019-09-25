@@ -16,6 +16,11 @@ $( document ).ready(function() {
         displayArticles(showSaved)
     })
 
+    $("#scrape-articles").on("click", function() {
+        showSaved = false
+        displayArticles(showSaved)
+    })
+
 })
 
 // Grab the articles as a json
