@@ -81,7 +81,8 @@ $(document).on("click", ".add-note", function() {
         data: theNote
     })
     .then(response => {
-        console.log(response) 
+        console.log(response)
+        $("#note-body").empty()
         $("#notes-list").empty()
         openNotes($("#data-id").val())
     })
