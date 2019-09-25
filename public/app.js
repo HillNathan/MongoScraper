@@ -17,8 +17,14 @@ $( document ).ready(function() {
     })
 
     $("#scrape-articles").on("click", function() {
-        showSaved = false
-        displayArticles(showSaved)
+        $.ajax({
+            type: "GET",
+            url: "/scrape"
+        })
+        .then (response => {
+            showSaved = false
+            displayArticles(showSaved)
+        })
     })
 
 })

@@ -30,13 +30,12 @@ router.get ("/scrape", (req,res) => {
 
                 db.Article.create(newArticle)
                     .then( response => {
-                        console.log(response)
+                        res.redirect("/")
                     })
                     .catch (err => {
                         console.log(err)
                     })
             })
-            res.send("Scrape Complete.")
         })
         .catch(err => {
             console.log(err)
